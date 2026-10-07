@@ -1,0 +1,2255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Twinsight Questionnaire</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --background: #f5f6f8;
+      --card: #ffffff;
+      --text: #17191d;
+      --muted: #6d727a;
+      --border: #dfe2e6;
+      --primary: #17191d;
+      --primary-light: #eef0f2;
+      --accent: #5f65e8;
+      --danger: #c63c3c;
+      --radius: 18px;
+    }
+
+    body {
+      font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+      background: var(--background);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    /* -------------------------
+       HEADER
+    ------------------------- */
+
+    .topbar {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+    }
+
+    .topbar-inner {
+      max-width: 900px;
+      margin: auto;
+      padding: 18px 24px 14px;
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 13px;
+    }
+
+    .brand {
+      font-size: 20px;
+      font-weight: 750;
+      letter-spacing: -0.4px;
+    }
+
+    .screen-count {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .progress-track {
+      height: 5px;
+      width: 100%;
+      background: #e5e7ea;
+      border-radius: 100px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0;
+      background: var(--primary);
+      border-radius: 100px;
+      transition: width 0.35s ease;
+    }
+
+    /* -------------------------
+       MAIN LAYOUT
+    ------------------------- */
+
+    main {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 50px 24px 100px;
+    }
+
+    .screen {
+      display: none;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(7px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .eyebrow {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      font-size: clamp(34px, 5vw, 52px);
+      line-height: 1.06;
+      letter-spacing: -1.7px;
+      margin-bottom: 14px;
+    }
+
+    h2 {
+      font-size: clamp(29px, 4vw, 40px);
+      letter-spacing: -1.1px;
+      line-height: 1.1;
+      margin-bottom: 12px;
+    }
+
+    .screen-description {
+      font-size: 17px;
+      color: var(--muted);
+      max-width: 680px;
+      margin-bottom: 40px;
+    }
+
+    .hook {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    /* -------------------------
+       INTRO
+    ------------------------- */
+
+    .intro-card {
+      background: var(--card);
+      padding: 38px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      margin-top: 30px;
+    }
+
+    .intro-card p {
+      color: #464b52;
+      font-size: 17px;
+      margin-bottom: 20px;
+      max-width: 700px;
+    }
+
+    .time-pill {
+      display: inline-block;
+      padding: 7px 12px;
+      border-radius: 100px;
+      background: var(--primary-light);
+      color: #454950;
+      font-size: 13px;
+      margin-bottom: 28px;
+      font-weight: 600;
+    }
+
+    .research-option {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      border-top: 1px solid var(--border);
+      padding-top: 22px;
+      margin-top: 22px;
+    }
+
+    .research-option input {
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+      accent-color: var(--primary);
+    }
+
+    .research-option label {
+      cursor: pointer;
+    }
+
+    .research-option span {
+      display: block;
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 3px;
+    }
+
+    /* -------------------------
+       QUESTION CARDS
+    ------------------------- */
+
+    .question {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      margin-bottom: 20px;
+    }
+
+    .question-number {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 7px;
+    }
+
+    .question-title {
+      font-size: 19px;
+      font-weight: 680;
+      margin-bottom: 18px;
+    }
+
+    .question-subtitle {
+      color: var(--muted);
+      font-size: 14px;
+      margin: -7px 0 18px;
+    }
+
+    /* -------------------------
+       RADIO / CHECKBOX OPTIONS
+    ------------------------- */
+
+    .options {
+      display: grid;
+      gap: 10px;
+    }
+
+    .options.two-column {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 13px 15px;
+      cursor: pointer;
+      transition: 0.15s ease;
+      min-height: 50px;
+    }
+
+    .option:hover {
+      background: #fafafa;
+      border-color: #b6bac1;
+    }
+
+    .option:has(input:checked) {
+      background: var(--primary-light);
+      border-color: var(--primary);
+    }
+
+    .option input[type="radio"],
+    .option input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      accent-color: var(--primary);
+    }
+
+    .inline-text {
+      border: none;
+      border-bottom: 1px solid #aaa;
+      outline: none;
+      background: transparent;
+      width: 160px;
+      padding: 4px;
+    }
+
+    /* -------------------------
+       B QUESTIONS
+    ------------------------- */
+
+    .conflict-labels {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 18px;
+      font-weight: 650;
+    }
+
+    .versus {
+      color: var(--muted);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* -------------------------
+       TEXT AREAS
+    ------------------------- */
+
+    textarea {
+      width: 100%;
+      min-height: 150px;
+      resize: vertical;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      padding: 16px;
+      outline: none;
+      transition: 0.15s ease;
+      background: #fbfbfc;
+    }
+
+    textarea:focus,
+    .text-input:focus {
+      border-color: var(--primary);
+      background: white;
+      box-shadow: 0 0 0 3px rgba(20, 20, 20, 0.07);
+    }
+
+    .helper-text {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 10px;
+    }
+
+    .cue {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .cue strong {
+      color: #555a62;
+    }
+
+    .voice-button {
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: 9px;
+      padding: 7px 11px;
+      margin-bottom: 10px;
+      font-size: 13px;
+    }
+
+    /* -------------------------
+       C4 TABLE
+    ------------------------- */
+
+    .tradeoff-container {
+      overflow-x: auto;
+      margin-top: 22px;
+    }
+
+    .tradeoff-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 650px;
+    }
+
+    .tradeoff-table th,
+    .tradeoff-table td {
+      padding: 13px 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tradeoff-table th {
+      font-size: 13px;
+      color: var(--muted);
+      text-align: center;
+      font-weight: 650;
+    }
+
+    .tradeoff-table th:first-child,
+    .tradeoff-table td:first-child {
+      text-align: left;
+      width: 56%;
+    }
+
+    .tradeoff-table td:not(:first-child) {
+      text-align: center;
+    }
+
+    .tradeoff-table input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary);
+    }
+
+    /* -------------------------
+       D1 SENTENCE BUILDER
+    ------------------------- */
+
+    .sentence-builder {
+      font-size: 18px;
+      line-height: 2;
+    }
+
+    .sentence-builder input {
+      width: 100%;
+      border: none;
+      border-bottom: 2px solid var(--border);
+      outline: none;
+      padding: 9px 4px;
+      margin: 7px 0;
+      transition: border-color 0.15s;
+    }
+
+    .sentence-builder input:focus {
+      border-bottom-color: var(--primary);
+    }
+
+    /* -------------------------
+       TRUST GRID
+    ------------------------- */
+
+    .trust-grid {
+      overflow-x: auto;
+    }
+
+    .trust-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 500px;
+    }
+
+    .trust-table td,
+    .trust-table th {
+      padding: 14px 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .trust-table th {
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .trust-table th:first-child,
+    .trust-table td:first-child {
+      text-align: left;
+      width: 48%;
+    }
+
+    .trust-table td:not(:first-child) {
+      text-align: center;
+    }
+
+    .trust-table input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary);
+    }
+
+    .text-input {
+      width: 100%;
+      border: 1px solid var(--border);
+      padding: 14px 16px;
+      border-radius: 12px;
+      outline: none;
+      background: #fbfbfc;
+    }
+
+    /* -------------------------
+       NAVIGATION
+    ------------------------- */
+
+    .navigation {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      margin-top: 35px;
+    }
+
+    .btn {
+      border-radius: 11px;
+      padding: 13px 21px;
+      font-weight: 650;
+      border: none;
+      transition: 0.15s ease;
+      min-width: 110px;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.86;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .btn-secondary:hover {
+      background: #eceef0;
+    }
+
+    .error-message {
+      display: none;
+      background: #fff0f0;
+      border: 1px solid #ffd0d0;
+      color: var(--danger);
+      padding: 12px 15px;
+      border-radius: 10px;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+
+    /* -------------------------
+       RESULTS
+    ------------------------- */
+
+    .result-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 45px;
+      text-align: center;
+    }
+
+    .twin-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      margin: 0 auto 24px;
+      display: grid;
+      place-items: center;
+      font-size: 34px;
+    }
+
+    .result-card p {
+      color: var(--muted);
+      max-width: 540px;
+      margin: 15px auto 25px;
+    }
+
+    /* -------------------------
+       RESPONSIVE
+    ------------------------- */
+
+    @media (max-width: 650px) {
+      main {
+        padding: 35px 16px 80px;
+      }
+
+      .topbar-inner {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+
+      .intro-card,
+      .question {
+        padding: 22px;
+      }
+
+      .options.two-column {
+        grid-template-columns: 1fr;
+      }
+
+      .conflict-labels {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .versus {
+        margin: -7px 0;
+      }
+
+      .navigation {
+        flex-direction: column-reverse;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="topbar">
+    <div class="topbar-inner">
+
+      <div class="brand-row">
+        <div class="brand">Twinsight</div>
+
+        <div class="screen-count" id="screenCount">
+          About 5 minutes · 4 screens
+        </div>
+      </div>
+
+      <div class="progress-track">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+
+    </div>
+  </header>
+
+
+  <main>
+
+    <!-- =========================================
+         CONSENT
+    ========================================== -->
+
+    <section class="screen active" data-screen="0">
+
+      <div class="eyebrow">Twinsight questionnaire</div>
+
+      <h1>Meet your political twin.</h1>
+
+      <p class="screen-description">
+        Answer a few questions about what matters to you and how you make
+        political decisions.
+      </p>
+
+      <div class="intro-card">
+
+        <span class="time-pill">
+          About 5 minutes · 4 screens
+        </span>
+
+        <h2>Before starting</h2>
+
+        <p>
+          Twinsight builds a private political twin from your answers:
+          a profile of how you think, not stored with your name.
+        </p>
+
+        <p>
+          Your twin finds your best candidate matches and flags what matters
+          to you.
+        </p>
+
+        <p>
+          Your twin gets more accurate the more you share.
+        </p>
+
+        <div class="research-option">
+
+          <input
+            type="checkbox"
+            id="researchConsent"
+            name="researchConsent"
+          />
+
+          <label for="researchConsent">
+            <strong>
+              Let my answers be included in research.
+            </strong>
+
+            <span>
+              Optional. Researchers only ever see combined results from many
+              people, never individual answers.
+            </span>
+          </label>
+
+        </div>
+
+        <div class="navigation">
+          <span></span>
+
+          <button
+            class="btn btn-primary"
+            onclick="nextScreen()"
+          >
+            Build my twin →
+          </button>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================================
+         SCREEN A
+    ========================================== -->
+
+    <section class="screen" data-screen="1">
+
+      <div class="eyebrow">Screen A · About you</div>
+
+      <h2>First, a little about you.</h2>
+
+      <p class="screen-description">
+        <span class="hook">
+          Build your twin once. It watches politics forever.
+        </span>
+      </p>
+
+
+      <!-- A1 -->
+      <div class="question">
+
+        <div class="question-number">A1</div>
+
+        <div class="question-title">
+          Age
+        </div>
+
+        <div class="options">
+
+          <label class="option">
+            <input type="radio" name="age" value="18-24">
+            18–24
+          </label>
+
+          <label class="option">
+            <input type="radio" name="age" value="25-34">
+            25–34
+          </label>
+
+          <label class="option">
+            <input type="radio" name="age" value="35-49">
+            35–49
+          </label>
+
+          <label class="option">
+            <input type="radio" name="age" value="50-64">
+            50–64
+          </label>
+
+          <label class="option">
+            <input type="radio" name="age" value="65+">
+            65+
+          </label>
+
+        </div>
+      </div>
+
+
+      <!-- A2 -->
+      <div class="question">
+
+        <div class="question-number">A2</div>
+
+        <div class="question-title">
+          Gender
+        </div>
+
+        <div class="options">
+
+          <label class="option">
+            <input type="radio" name="gender" value="Man">
+            Man
+          </label>
+
+          <label class="option">
+            <input type="radio" name="gender" value="Woman">
+            Woman
+          </label>
+
+          <label class="option">
+            <input type="radio" name="gender" value="Nonbinary">
+            Nonbinary
+          </label>
+
+          <label class="option">
+            <input type="radio" name="gender" value="Self-describe">
+
+            Self-describe:
+
+            <input
+              class="inline-text"
+              type="text"
+              id="genderSelf"
+              onclick="event.stopPropagation()"
+            >
+          </label>
+
+        </div>
+      </div>
+
+
+      <!-- A3 -->
+      <div class="question">
+
+        <div class="question-number">A3</div>
+
+        <div class="question-title">
+          Race / ethnicity
+        </div>
+
+        <div class="question-subtitle">
+          Select all that apply.
+        </div>
+
+        <div class="options two-column">
+
+          <label class="option">
+            <input type="checkbox" name="race" value="American Indian or Alaska Native">
+            American Indian or Alaska Native
+          </label>
+
+          <label class="option">
+            <input type="checkbox" name="race" value="Asian">
+            Asian
+          </label>
+
+          <label class="option">
+            <input type="checkbox" name="race" value="Black or African American">
+            Black or African American
+          </label>
+
+          <label class="option">
+            <input type="checkbox" name="race" value="Hispanic or Latino">
+            Hispanic or Latino
+          </label>
+
+          <label class="option">
+            <input type="checkbox" name="race" value="Middle Eastern or North African">
+            Middle Eastern or North African
+          </label>
+
+          <label class="option">
+            <input type="checkbox" name="race" value="Native Hawaiian or Pacific Islander">
+            Native Hawaiian or Pacific Islander
+          </label>
+
+          <label class="option">
+            <input type="checkbox" name="race" value="White">
+            White
+          </label>
+
+          <label class="option">
+            <input type="checkbox" name="race" value="Self-describe">
+            Self-describe:
+            <input class="inline-text" id="raceSelf">
+          </label>
+
+        </div>
+      </div>
+
+
+      <!-- A4 -->
+      <div class="question">
+
+        <div class="question-number">A4</div>
+
+        <div class="question-title">
+          Highest level of education completed
+        </div>
+
+        <div class="options">
+
+          <label class="option">
+            <input type="radio" name="education" value="High school or less">
+            High school or less
+          </label>
+
+          <label class="option">
+            <input type="radio" name="education" value="Some college / associate degree">
+            Some college / associate degree
+          </label>
+
+          <label class="option">
+            <input type="radio" name="education" value="Bachelor's degree">
+            Bachelor's degree
+          </label>
+
+          <label class="option">
+            <input type="radio" name="education" value="Graduate degree">
+            Graduate degree
+          </label>
+
+        </div>
+      </div>
+
+
+      <!-- A5 -->
+      <div class="question">
+
+        <div class="question-number">A5</div>
+
+        <div class="question-title">
+          Household income
+        </div>
+
+        <div class="question-subtitle">
+          Approximate, per year.
+        </div>
+
+        <div class="options two-column">
+
+          <label class="option">
+            <input type="radio" name="income" value="Under $25k">
+            Under $25k
+          </label>
+
+          <label class="option">
+            <input type="radio" name="income" value="$25-49k">
+            $25–49k
+          </label>
+
+          <label class="option">
+            <input type="radio" name="income" value="$50-74k">
+            $50–74k
+          </label>
+
+          <label class="option">
+            <input type="radio" name="income" value="$75-99k">
+            $75–99k
+          </label>
+
+          <label class="option">
+            <input type="radio" name="income" value="$100-149k">
+            $100–149k
+          </label>
+
+          <label class="option">
+            <input type="radio" name="income" value="$150-199k">
+            $150–199k
+          </label>
+
+          <label class="option">
+            <input type="radio" name="income" value="$200k+">
+            $200k+
+          </label>
+
+        </div>
+      </div>
+
+
+      <!-- A6 -->
+      <div class="question">
+
+        <div class="question-number">A6</div>
+
+        <div class="question-title">
+          Do you own or rent your home?
+        </div>
+
+        <div class="options">
+
+          <label class="option">
+            <input type="radio" name="housing" value="Own">
+            Own
+          </label>
+
+          <label class="option">
+            <input type="radio" name="housing" value="Rent">
+            Rent
+          </label>
+
+          <label class="option">
+            <input type="radio" name="housing" value="Live with family / other">
+            Live with family / other
+          </label>
+
+        </div>
+      </div>
+
+
+      <!-- A7 -->
+      <div class="question">
+
+        <div class="question-number">A7</div>
+
+        <div class="question-title">
+          Did you vote in the 2024 election?
+        </div>
+
+        <div class="options">
+
+          <label class="option">
+            <input type="radio" name="voted2024" value="Yes">
+            Yes
+          </label>
+
+          <label class="option">
+            <input type="radio" name="voted2024" value="No">
+            No
+          </label>
+
+          <label class="option">
+            <input type="radio" name="voted2024" value="Wasn't eligible">
+            Wasn't eligible
+          </label>
+
+        </div>
+      </div>
+
+
+      <!-- A8 -->
+      <div class="question">
+
+        <div class="question-number">A8</div>
+
+        <div class="question-title">
+          How closely do you follow politics?
+        </div>
+
+        <div class="options">
+
+          <label class="option">
+            <input type="radio" name="politicsAttention" value="Very closely">
+            Very closely
+          </label>
+
+          <label class="option">
+            <input type="radio" name="politicsAttention" value="Somewhat">
+            Somewhat
+          </label>
+
+          <label class="option">
+            <input type="radio" name="politicsAttention" value="Not much">
+            Not much
+          </label>
+
+          <label class="option">
+            <input type="radio" name="politicsAttention" value="Not at all">
+            Not at all
+          </label>
+
+        </div>
+      </div>
+
+
+      <div class="navigation">
+
+        <button class="btn btn-secondary" onclick="previousScreen()">
+          ← Back
+        </button>
+
+        <button class="btn btn-primary" onclick="nextScreen()">
+          Continue →
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================================
+         SCREEN B
+    ========================================== -->
+
+    <section class="screen" data-screen="2">
+
+      <div class="eyebrow">
+        Screen B · When things conflict
+      </div>
+
+      <h2>What should usually win?</h2>
+
+      <p class="screen-description">
+        Politics often means choosing between things that are both valuable.
+        Which side are you closer to?
+      </p>
+
+
+      <!-- B1 -->
+      <div class="question">
+
+        <div class="question-number">B1</div>
+
+        <div class="conflict-labels">
+          <span>Keeping people safe</span>
+          <span class="versus">vs.</span>
+          <span>Protecting personal freedom</span>
+        </div>
+
+        <div class="options">
+
+          <label class="option">
+            <input type="radio" name="b1" value="Strongly keeping people safe">
+            Strongly: keeping people safe
+          </label>
+
+          <label class="option">
+            <input type="radio" name="b1" value="Lean keeping people safe">
+            Lean: keeping people safe
+          </label>
+
+          <label class="option">
+            <input type="radio" name="b1" value="Both equally">
+            Both equally
+          </label>
+
+          <label class="option">
+            <input type="radio" name="b1" value="Lean protecting personal freedom">
+            Lean: protecting personal freedom
+          </label>
+
+          <label class="option">
+            <input type="radio" name="b1" value="Strongly protecting personal freedom">
+            Strongly: protecting personal freedom
+          </label>
+
+        </div>
+      </div>
+
+
+      <!-- B2 -->
+      <div class="question">
+
+        <div class="question-number">B2</div>
+
+        <div class="conflict-labels">
+          <span>Equal chances for all</span>
+          <span class="versus">vs.</span>
+          <span>Rewarding effort and success</span>
+        </div>
+
+        <div class="options">
+
+          <label class="option">
+            <input type="radio" name="b2" value="Strongly equal chances for all">
+            Strongly: equal chances for all
+          </label>
+
+          <label class="option">
+            <input type="radio" name="b2" value="Lean equal chances for all">
+            Lean: equal chances for all
+          </label>
+
+          <label class="option">
+            <input type="radio" name="b2" value="Both equally">
+            Both equally
+          </label>
+
+          <label class="option">
+            <input type="radio" name="b2" value="Lean rewarding effort and success">
+            Lean: rewarding effort and success
+          </label>
+
+          <label class="option">
+            <input type="radio" name="b2" value="Strongly rewarding effort and success">
+            Strongly: rewarding effort and success
+          </label>
+
+        </div>
+      </div>
+
+
+      <!-- B3 -->
+      <div class="question">
+
+        <div class="question-number">B3</div>
+
+        <div class="conflict-labels">
+          <span>Helping people now</span>
+          <span class="versus">vs.</span>
+          <span>Keeping costs and taxes low</span>
+        </div>
+
+        <div class="options">
+
+          <label class="option">
+            <input type="radio" name="b3" value="Strongly helping people now">
+            Strongly: helping people now
+          </label>
+
+          <label class="option">
+            <input type="radio" name="b3" value="Lean helping people now">
+            Lean: helping people now
+          </label>
+
+          <label class="option">
+            <input type="radio" name="b3" value="Both equally">
+            Both equally
+          </label>
+
+          <label class="option">
+            <input type="radio" name="b3" value="Lean keeping costs and taxes low">
+            Lean: keeping costs and taxes low
+          </label>
+
+          <label class="option">
+            <input type="radio" name="b3" value="Strongly keeping costs and taxes low">
+            Strongly: keeping costs and taxes low
+          </label>
+
+        </div>
+      </div>
+
+
+      <div class="navigation">
+
+        <button class="btn btn-secondary" onclick="previousScreen()">
+          ← Back
+        </button>
+
+        <button class="btn btn-primary" onclick="nextScreen()">
+          Continue →
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================================
+         SCREEN C
+    ========================================== -->
+
+    <section class="screen" data-screen="3">
+
+      <div class="eyebrow">
+        Screen C · In your own words
+      </div>
+
+      <h2>Tell your twin what matters.</h2>
+
+      <p class="screen-description">
+        There aren't right answers here. Say as much or as little as you want.
+      </p>
+
+
+      <!-- C1 -->
+      <div class="question">
+
+        <div class="question-number">C1</div>
+
+        <div class="question-title">
+          Describe your life right now, and what's on your mind most these days.
+        </div>
+
+        <button
+          class="voice-button"
+          onclick="startDictation('c1')"
+          type="button"
+        >
+          🎙 Dictate
+        </button>
+
+        <textarea
+          id="c1"
+          placeholder="Write your answer here..."
+        ></textarea>
+
+        <p class="helper-text">
+          Your days, where you grew up, what's shaped how you see the world,
+          and your biggest concerns right now.
+        </p>
+
+      </div>
+
+
+      <!-- C2 -->
+      <div class="question">
+
+        <div class="question-number">C2</div>
+
+        <div class="question-title">
+          Of the things in your life, what could the government do that
+          would help you most?
+        </div>
+
+        <button
+          class="voice-button"
+          onclick="startDictation('c2')"
+          type="button"
+        >
+          🎙 Dictate
+        </button>
+
+        <textarea
+          id="c2"
+          placeholder="Write your answer here..."
+        ></textarea>
+
+        <p class="cue">
+          <strong>Think about:</strong>
+          money, home, work, family, health, safety, your community
+        </p>
+
+      </div>
+
+
+      <!-- C3 -->
+      <div class="question">
+
+        <div class="question-number">C3</div>
+
+        <div class="question-title">
+          Looking beyond your own life, what bothers you most about how
+          the country is run?
+        </div>
+
+        <button
+          class="voice-button"
+          onclick="startDictation('c3')"
+          type="button"
+        >
+          🎙 Dictate
+        </button>
+
+        <textarea
+          id="c3"
+          placeholder="Write your answer here..."
+        ></textarea>
+
+        <p class="cue">
+          <strong>Think about:</strong>
+          the economy, taxes and who pays them, how government is run and
+          who it listens to, rights and freedoms, the country's direction
+        </p>
+
+      </div>
+
+
+      <!-- C4 -->
+      <div class="question">
+
+        <div class="question-number">C4</div>
+
+        <div class="question-title">
+          To get what you want on the things you just described, which of
+          these would you accept, and which would be too much?
+        </div>
+
+        <div class="question-subtitle">
+          Every row starts on “Doesn't apply.” Leave a row alone if it isn't
+          relevant to you.
+        </div>
+
+        <div class="tradeoff-container">
+
+          <table class="tradeoff-table">
+
+            <thead>
+              <tr>
+                <th></th>
+                <th>Would accept</th>
+                <th>Too much</th>
+                <th>Doesn't apply</th>
+              </tr>
+            </thead>
+
+            <tbody id="tradeoffBody"></tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+
+      <div class="navigation">
+
+        <button class="btn btn-secondary" onclick="previousScreen()">
+          ← Back
+        </button>
+
+        <button class="btn btn-primary" onclick="nextScreen()">
+          Continue →
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================================
+         SCREEN D
+    ========================================== -->
+
+    <section class="screen" data-screen="4">
+
+      <div class="eyebrow">
+        Screen D · How you decide
+      </div>
+
+      <h2>What earns—or loses—your vote?</h2>
+
+      <p class="screen-description">
+        These answers help your twin understand how you judge candidates,
+        not just which policies you prefer.
+      </p>
+
+
+      <!-- D1 -->
+      <div class="question">
+
+        <div class="question-number">D1</div>
+
+        <div class="question-title">
+          Complete this sentence.
+        </div>
+
+        <div class="sentence-builder">
+
+          I wouldn't vote for someone who
+
+          <input
+            type="text"
+            id="d1Bad"
+            placeholder="What could lose your vote?"
+          >
+
+          even if they agreed with me about
+
+          <input
+            type="text"
+            id="d1Agree"
+            placeholder="An issue important to you"
+          >
+
+        </div>
+
+        <p class="helper-text">
+          For example: “I wouldn't vote for someone who lied about how they
+          spent public money, even if they agreed with me about lowering taxes.”
+        </p>
+
+        <p class="helper-text">
+          If no one comes to mind, imagine a candidate who agrees with you
+          on almost everything. What could they do that would lose your vote?
+        </p>
+
+      </div>
+
+
+      <!-- D2 -->
+      <div class="question">
+
+        <div class="question-number">D2</div>
+
+        <div class="question-title">
+          Where do you usually hear about politics?
+        </div>
+
+        <div class="question-subtitle">
+          Select all that apply.
+        </div>
+
+        <div class="options two-column">
+
+          <label class="option">
+            <input type="checkbox" name="newsSource" value="TV news">
+            TV news
+          </label>
+
+          <label class="option">
+            <input type="checkbox" name="newsSource" value="News websites or apps">
+            News websites or apps
+          </label>
+
+          <label class="option">
+            <input type="checkbox" name="newsSource" value="Newspapers">
+            Newspapers
+          </label>
+
+          <label class="option">
+            <input type="checkbox" name="newsSource" value="Social media">
+            Social media
+          </label>
+
+          <label class="option">
+            <input type="checkbox" name="newsSource" value="Podcasts or YouTube">
+            Podcasts or YouTube
+          </label>
+
+          <label class="option">
+            <input type="checkbox" name="newsSource" value="Friends and family">
+            Friends and family
+          </label>
+
+          <label class="option">
+            <input type="checkbox" name="newsSource" value="Work or school">
+            Work or school
+          </label>
+
+          <label class="option">
+            <input type="checkbox" name="newsSource" value="Religious community">
+            Religious community
+          </label>
+
+          <label class="option">
+            <input type="checkbox" name="newsSource" value="I mostly don't">
+            I mostly don't
+          </label>
+
+        </div>
+
+      </div>
+
+
+      <!-- D3 -->
+      <div class="question">
+
+        <div class="question-number">D3</div>
+
+        <div class="question-title">
+          How much do you trust each of these?
+        </div>
+
+        <div class="trust-grid">
+
+          <table class="trust-table">
+
+            <thead>
+              <tr>
+                <th></th>
+                <th>A lot</th>
+                <th>Some</th>
+                <th>Not much</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <tr>
+                <td>People in general</td>
+
+                <td>
+                  <input type="radio" name="trustPeople" value="A lot">
+                </td>
+
+                <td>
+                  <input type="radio" name="trustPeople" value="Some">
+                </td>
+
+                <td>
+                  <input type="radio" name="trustPeople" value="Not much">
+                </td>
+              </tr>
+
+              <tr>
+                <td>Local government</td>
+
+                <td>
+                  <input type="radio" name="trustLocal" value="A lot">
+                </td>
+
+                <td>
+                  <input type="radio" name="trustLocal" value="Some">
+                </td>
+
+                <td>
+                  <input type="radio" name="trustLocal" value="Not much">
+                </td>
+              </tr>
+
+              <tr>
+                <td>News media</td>
+
+                <td>
+                  <input type="radio" name="trustNews" value="A lot">
+                </td>
+
+                <td>
+                  <input type="radio" name="trustNews" value="Some">
+                </td>
+
+                <td>
+                  <input type="radio" name="trustNews" value="Not much">
+                </td>
+              </tr>
+
+              <tr>
+                <td>Scientists and experts</td>
+
+                <td>
+                  <input type="radio" name="trustExperts" value="A lot">
+                </td>
+
+                <td>
+                  <input type="radio" name="trustExperts" value="Some">
+                </td>
+
+                <td>
+                  <input type="radio" name="trustExperts" value="Not much">
+                </td>
+              </tr>
+
+              <tr>
+                <td>Friends and family</td>
+
+                <td>
+                  <input type="radio" name="trustFamily" value="A lot">
+                </td>
+
+                <td>
+                  <input type="radio" name="trustFamily" value="Some">
+                </td>
+
+                <td>
+                  <input type="radio" name="trustFamily" value="Not much">
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+
+
+      <!-- D4 -->
+      <div class="question">
+
+        <div class="question-number">D4</div>
+
+        <div class="question-title">
+          Your zip code
+        </div>
+
+        <input
+          class="text-input"
+          type="text"
+          id="zipCode"
+          maxlength="10"
+          inputmode="numeric"
+          placeholder="Enter zip code"
+        >
+
+        <p class="helper-text">
+          Needed to find your ballot and the officials who represent you.
+        </p>
+
+      </div>
+
+
+      <div class="navigation">
+
+        <button class="btn btn-secondary" onclick="previousScreen()">
+          ← Back
+        </button>
+
+        <button class="btn btn-primary" onclick="finishQuestionnaire()">
+          See my matches →
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================================
+         RESULTS
+    ========================================== -->
+
+    <section class="screen" data-screen="5">
+
+      <div class="result-card">
+
+        <div class="twin-icon">
+          ✓
+        </div>
+
+        <div class="eyebrow">
+          Twin created
+        </div>
+
+        <h2>Your political twin is ready.</h2>
+
+        <p>
+          Twinsight now has a starting picture of the issues, tradeoffs,
+          values, and candidate qualities that matter most to you.
+        </p>
+
+        <button
+          class="btn btn-primary"
+          onclick="showAnswers()"
+        >
+          View saved answers
+        </button>
+
+      </div>
+
+      <div
+        id="answersOutput"
+        style="margin-top: 30px;"
+      ></div>
+
+    </section>
+
+  </main>
+
+
+  <script>
+
+    /* =========================================
+       APP STATE
+    ========================================== */
+
+    let currentScreen = 0;
+
+    const maxQuestionScreen = 4;
+
+    const answers = {};
+
+
+    /* =========================================
+       TRADE-OFF QUESTIONS
+    ========================================== */
+
+    const tradeoffs = [
+
+      "Higher taxes on people like me",
+
+      "Higher taxes on the wealthy and corporations",
+
+      "Higher government debt",
+
+      "Cuts to other programs",
+
+      "Fewer jobs or slower business growth",
+
+      "Higher prices",
+
+      "More government involvement in daily life",
+
+      "Less government protection or oversight",
+
+      "Changes to my neighborhood or community",
+
+      "Some people worse off so others better off",
+
+      "It takes years before anything improves"
+
+    ];
+
+
+    function buildTradeoffTable() {
+
+      const body = document.getElementById("tradeoffBody");
+
+      tradeoffs.forEach((tradeoff, index) => {
+
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+          <td>${tradeoff}</td>
+
+          <td>
+            <input
+              type="radio"
+              name="tradeoff-${index}"
+              value="Would accept"
+            >
+          </td>
+
+          <td>
+            <input
+              type="radio"
+              name="tradeoff-${index}"
+              value="Too much"
+            >
+          </td>
+
+          <td>
+            <input
+              type="radio"
+              name="tradeoff-${index}"
+              value="Doesn't apply"
+              checked
+            >
+          </td>
+        `;
+
+        body.appendChild(row);
+
+      });
+
+    }
+
+
+    buildTradeoffTable();
+
+
+    /* =========================================
+       NAVIGATION
+    ========================================== */
+
+    function showScreen(screenNumber) {
+
+      document.querySelectorAll(".screen").forEach(screen => {
+        screen.classList.remove("active");
+      });
+
+      const newScreen =
+        document.querySelector(`[data-screen="${screenNumber}"]`);
+
+      if (newScreen) {
+        newScreen.classList.add("active");
+      }
+
+      currentScreen = screenNumber;
+
+      updateProgress();
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
+    }
+
+
+    function nextScreen() {
+
+      saveAnswers();
+
+      if (currentScreen < maxQuestionScreen) {
+        showScreen(currentScreen + 1);
+      }
+
+    }
+
+
+    function previousScreen() {
+
+      saveAnswers();
+
+      if (currentScreen > 0) {
+        showScreen(currentScreen - 1);
+      }
+
+    }
+
+
+    /* =========================================
+       PROGRESS
+    ========================================== */
+
+    function updateProgress() {
+
+      const progressBar =
+        document.getElementById("progressBar");
+
+      const screenCount =
+        document.getElementById("screenCount");
+
+
+      if (currentScreen === 0) {
+
+        progressBar.style.width = "0%";
+
+        screenCount.textContent =
+          "About 5 minutes · 4 screens";
+
+        return;
+      }
+
+
+      if (currentScreen === 5) {
+
+        progressBar.style.width = "100%";
+
+        screenCount.textContent = "Complete";
+
+        return;
+      }
+
+
+      const percentage =
+        (currentScreen / maxQuestionScreen) * 100;
+
+
+      progressBar.style.width =
+        `${percentage}%`;
+
+      screenCount.textContent =
+        `Screen ${currentScreen} of ${maxQuestionScreen}`;
+
+    }
+
+
+    /* =========================================
+       COLLECT ANSWERS
+    ========================================== */
+
+    function getRadioValue(name) {
+
+      const selected =
+        document.querySelector(
+          `input[name="${name}"]:checked`
+        );
+
+      return selected
+        ? selected.value
+        : null;
+
+    }
+
+
+    function getCheckboxValues(name) {
+
+      return Array
+        .from(
+          document.querySelectorAll(
+            `input[name="${name}"]:checked`
+          )
+        )
+        .map(input => input.value);
+
+    }
+
+
+    function saveAnswers() {
+
+      /* Consent */
+
+      answers.researchConsent =
+        document.getElementById(
+          "researchConsent"
+        ).checked;
+
+
+      /* Screen A */
+
+      answers.age =
+        getRadioValue("age");
+
+      answers.gender =
+        getRadioValue("gender");
+
+      answers.genderSelf =
+        document.getElementById(
+          "genderSelf"
+        ).value;
+
+      answers.race =
+        getCheckboxValues("race");
+
+      answers.raceSelf =
+        document.getElementById(
+          "raceSelf"
+        ).value;
+
+      answers.education =
+        getRadioValue("education");
+
+      answers.income =
+        getRadioValue("income");
+
+      answers.housing =
+        getRadioValue("housing");
+
+      answers.voted2024 =
+        getRadioValue("voted2024");
+
+      answers.politicsAttention =
+        getRadioValue(
+          "politicsAttention"
+        );
+
+
+      /* Screen B */
+
+      answers.safetyFreedom =
+        getRadioValue("b1");
+
+      answers.equalitySuccess =
+        getRadioValue("b2");
+
+      answers.helpTaxes =
+        getRadioValue("b3");
+
+
+      /* Screen C */
+
+      answers.lifeRightNow =
+        document.getElementById(
+          "c1"
+        ).value;
+
+      answers.governmentHelp =
+        document.getElementById(
+          "c2"
+        ).value;
+
+      answers.countryConcern =
+        document.getElementById(
+          "c3"
+        ).value;
+
+
+      answers.tradeoffs =
+        tradeoffs.map(
+          (tradeoff, index) => {
+
+            return {
+              item: tradeoff,
+              answer:
+                getRadioValue(
+                  `tradeoff-${index}`
+                )
+            };
+
+          }
+        );
+
+
+      /* Screen D */
+
+      answers.candidateDealbreaker =
+        document.getElementById(
+          "d1Bad"
+        ).value;
+
+      answers.candidateAgreement =
+        document.getElementById(
+          "d1Agree"
+        ).value;
+
+      answers.newsSources =
+        getCheckboxValues(
+          "newsSource"
+        );
+
+      answers.trust = {
+
+        people:
+          getRadioValue("trustPeople"),
+
+        localGovernment:
+          getRadioValue("trustLocal"),
+
+        newsMedia:
+          getRadioValue("trustNews"),
+
+        experts:
+          getRadioValue("trustExperts"),
+
+        friendsFamily:
+          getRadioValue("trustFamily")
+
+      };
+
+      answers.zipCode =
+        document.getElementById(
+          "zipCode"
+        ).value;
+
+    }
+
+
+    /* =========================================
+       FINISH
+    ========================================== */
+
+    function finishQuestionnaire() {
+
+      saveAnswers();
+
+      /*
+        For now we're saving the completed
+        questionnaire in the browser.
+
+        This can later be replaced with a call
+        to your database/API.
+      */
+
+      localStorage.setItem(
+        "twinsightAnswers",
+        JSON.stringify(answers)
+      );
+
+      console.log(
+        "Twinsight answers:",
+        answers
+      );
+
+      showScreen(5);
+
+    }
+
+
+    /* =========================================
+       DISPLAY ANSWERS
+    ========================================== */
+
+    function showAnswers() {
+
+      saveAnswers();
+
+      const output =
+        document.getElementById(
+          "answersOutput"
+        );
+
+      output.innerHTML = `
+        <div class="question">
+          <div class="question-title">
+            Questionnaire data
+          </div>
+
+          <p class="helper-text">
+            This is shown for development purposes.
+            In the finished Twinsight product, this
+            data could instead be sent to your matching
+            algorithm.
+          </p>
+
+          <pre style="
+            margin-top:20px;
+            white-space:pre-wrap;
+            word-break:break-word;
+            background:#f5f6f8;
+            padding:20px;
+            border-radius:12px;
+            overflow:auto;
+            font-size:13px;
+          ">${escapeHTML(
+            JSON.stringify(
+              answers,
+              null,
+              2
+            )
+          )}</pre>
+
+        </div>
+      `;
+
+    }
+
+
+    function escapeHTML(text) {
+
+      return text
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;");
+
+    }
+
+
+    /* =========================================
+       VOICE DICTATION
+    ========================================== */
+
+    function startDictation(textareaId) {
+
+      const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+
+      if (!SpeechRecognition) {
+
+        alert(
+          "Voice dictation isn't supported by this browser. Try Chrome or type your answer instead."
+        );
+
+        return;
+
+      }
+
+
+      const recognition =
+        new SpeechRecognition();
+
+      recognition.lang =
+        "en-US";
+
+      recognition.interimResults =
+        false;
+
+      recognition.continuous =
+        false;
+
+
+      const textarea =
+        document.getElementById(
+          textareaId
+        );
+
+
+      recognition.onresult =
+        function(event) {
+
+          const transcript =
+            event.results[0][0]
+              .transcript;
+
+          if (textarea.value.trim()) {
+
+            textarea.value +=
+              " " + transcript;
+
+          } else {
+
+            textarea.value =
+              transcript;
+
+          }
+
+        };
+
+
+      recognition.onerror =
+        function() {
+
+          alert(
+            "Voice dictation couldn't start. Check your browser's microphone permissions."
+          );
+
+        };
+
+
+      recognition.start();
+
+    }
+
+
+    /* Initialize */
+
+    updateProgress();
+
+  </script>
+
+</body>
+</html>
